@@ -1,0 +1,16 @@
+ 
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile  # ใช้ Dockerfile ที่กำหนดเอง
+ 
+    ports:
+      - "80:80"
+    networks:
+      - app-network  # เชื่อมต่อกับ network ที่กำหนด
+
+networks:
+  app-network:  # กำหนด network ใหม่
+    driver: bridge  # ใช้ driver แบบ default คือ bridge
