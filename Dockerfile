@@ -54,10 +54,7 @@ RUN git clone https://github.com/owasp-modsecurity/ModSecurity.git /opt/ModSecur
     && cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsecurity.conf \
     && cp /opt/ModSecurity/unicode.mapping /etc/nginx/unicode.mapping
 
-# # ติดตั้ง ModSecurity สำหรับ Nginx
- 
-
-
+# # ติดตั้ง ModSecurity-nginx
 RUN git clone https://github.com/owasp-modsecurity/ModSecurity-nginx.git /opt/ModSecurity-nginx 
 RUN wget https://nginx.org/download/nginx-1.26.2.tar.gz -O /opt/nginx-1.26.2.tar.gz \
     && cd /opt \
