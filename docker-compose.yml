@@ -5,12 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile  
- 
     ports:
-      - "80:80"
+      - "443:443" 
     networks:
-      - app-network  
+      - app-network
+    volumes:
+      - ./logs/modsec.log:/var/log/modsec_audit.log  # เชื่อมต่อไฟล์ modsec.log กับ modsec_audit.log ใน container
 
 networks:
-  app-network: 
-    driver: bridge  
+  app-network:
+    external: true

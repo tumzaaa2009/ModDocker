@@ -1,0 +1,46 @@
+load_module /etc/nginx/modules-enabled/ngx_http_modsecurity_module.so;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        modsecurity on;
+        modsecurity_rules_file /etc/nginx/modsecurity.conf;
+
+        listen 443 ssl default_server;
+        ssl_certificate /etc/ssl/bundle.crt;
+        ssl_certificate_key /etc/ssl/wildcard_moph_go_th.key;
+
+        root /var/www/html/rhso4;
+        index index.html index.php;
+
+        charset utf-8;
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt { access_log off; log_not_found off; }
+
+        access_log off;
+        error_log /var/log/nginx/error.log error;
+
+        sendfile off;
+
+        client_max_body_size 100m;
+
+        # location ~ \.php$ {
+        #     include fastcgi_params;
+        #     fastcgi_pass 172.20.0.2:9000;
+        #     fastcgi_index index.php;
+        #     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        # }
+
+        location ~ /\.ht {
+            deny all;
+        }
+    }
+}
