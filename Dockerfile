@@ -5,6 +5,7 @@ FROM ubuntu:22.04
 
  
 RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y tzdata \
     && apt-get install -y \
     software-properties-common \
     gcc \
@@ -33,12 +34,13 @@ RUN apt-get update && apt-get upgrade -y \
     wget \
     && apt-get clean
 
- 
+RUN echo "Asia/Bangkok" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata
  
 # ติดตั้ง nginx
 RUN  add-apt-repository ppa:ondrej/nginx -y
 RUN apt-get update && apt-get install -y nginx
-COPY ./html/index.html /usr/share/nginx/html/index.html
+ 
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 # ติดตั้ง ModSecurity
@@ -72,12 +74,20 @@ RUN chmod -R 755 /opt/ModSecurity-nginx
 COPY ./conf/default /etc/nginx/sites-enabled/default
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./conf/modsecurity.conf /etc/nginx/modsecurity.conf
+
 COPY ./ssl/bundle.crt /etc/ssl/bundle.crt
 COPY ./ssl/wildcard_moph_go_th.key /etc/ssl/wildcard_moph_go_th.key
-COPY ./html /etc/nginx/html/
+ 
+
 RUN git clone https://github.com/coreruleset/coreruleset.git /opt/owasp-crs \
     && cp -r /opt/owasp-crs /etc/nginx/ \
     && mv /etc/nginx/owasp-crs/crs-setup.conf.example /etc/nginx/owasp-crs/crs-setup.conf
+
+COPY ./conf/crs-setup.custom.conf /etc/nginx/owasp-crs/rules/crs-setup.custom.conf 
+
+ 
+
+ 
 
 EXPOSE 443
 

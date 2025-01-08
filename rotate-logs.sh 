@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LOG_DIR="/var/log/modsec_logs"
+DATE=$(date +'%Y-%m-%d')
+LOG_FILE="$LOG_DIR/modsec_$DATE.log"
+
+ 
+touch "$LOG_FILE"
+
+ 
+ln -sf "$LOG_FILE" "$LOG_DIR/modsec_audit.log"
