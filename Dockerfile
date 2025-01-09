@@ -8,6 +8,7 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y geoipupdate -y \ 
     && apt-get install -y tzdata \
     && apt-get install -y \
+    && apt-get install -y cron \
     software-properties-common \
     gcc \
     make \
@@ -91,8 +92,14 @@ COPY ./conf/crs-setup.custom.conf /etc/nginx/owasp-crs/rules/crs-setup.custom.co
 COPY ./iplistblock/blocklistip.text /etc/modsecurity/blacklist.txt
 
 
+#CrontabRm
+COPY ./shtruncatelog/truncate.sh /usr/local/bin/truncate.sh
+RUN chmod +x /usr/local/bin/truncate.sh
+
+ 
+
+
 EXPOSE 443
 
 # คำสั่งเริ่มต้นเมื่อ container รัน
-CMD ["nginx", "-g", "daemon off;"]
- 
+CMD ["/bin/bash", "-c", "/usr/local/bin/truncate.sh & nginx -g 'daemon off;'"]
