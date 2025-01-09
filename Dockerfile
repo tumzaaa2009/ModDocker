@@ -5,6 +5,7 @@ FROM ubuntu:22.04
 
  
 RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y geoipupdate -y \ 
     && apt-get install -y tzdata \
     && apt-get install -y \
     software-properties-common \
@@ -86,8 +87,9 @@ RUN git clone https://github.com/coreruleset/coreruleset.git /opt/owasp-crs \
 COPY ./conf/crs-setup.custom.conf /etc/nginx/owasp-crs/rules/crs-setup.custom.conf 
 
  
+# BlockIp 
+COPY ./iplistblock/blocklistip.text /etc/modsecurity/blacklist.txt
 
- 
 
 EXPOSE 443
 

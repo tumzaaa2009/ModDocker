@@ -11,6 +11,7 @@ services:
     volumes:
       - ../project-rhso4/php_code:/var/www/html
       - ./logs/modsec.log:/var/log/modsec_audit.log  # เชื่อมต่อไฟล์ modsec.log กับ modsec_audit.log ใน container
+      - ./logs/modsecurity-debug.log:/var/log/modsecurity-debug.log  # เชื่อมต่อไฟล์ modsec.log กับ modsec_audit.log ใน container
     environment:
       - TZ=Asia/Bangkok  # ตั้งค่าเขตเวลาของ container เป็น Asia/Bangkok
  
